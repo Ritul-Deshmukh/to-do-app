@@ -103,6 +103,7 @@
 .todo-container li {
     color: black;
     font-size: 1.5rem;
+    margin-right: 20px;
 }
 
 .todo-buttons {
