@@ -1,75 +1,59 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react';
 
-class UpdateTodo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            isEditing: false,
-            task: this.props.task
-        }
-        this.handleRemove = this.handleRemove.bind(this);
-        this.toggleForm = this.toggleForm.bind(this);
-        this.handleUpdate = this.handleUpdate.bind(this);
-        this.handleChange = this.handleChange.bind(this);
-    }
+const UpdateTodo = (props) => {
+    const [isEditing, setIsEditing] = useState(false);
+    const [task, setTask] = useState(props.task);
 
-    handleRemove() {
-        this.props.removeTodo(this.props.id);
-    }
+    const handleRemove = () => {
+        props.removeTodo(props.id);
+    };
 
-    toggleForm() {
-        this.setState({ isEditing: !this.state.isEditing })
-    }
+    const toggleForm = () => {
+        setIsEditing(!isEditing);
+    };
 
-    handleUpdate(evt) {
+    const handleUpdate = (evt) => {
         evt.preventDefault();
-        this.props.updateTodo(this.props.id, this.state.task);
-        this.setState({ isEditing: false });
-    }
+        props.updateTodo(props.id, task);
+        setIsEditing(false);
+    };
 
-    handleChange(evt) {
-        this.setState({
-            [evt.target.name]: evt.target.value
-        });
-    }
+    const handleChange = (evt) => {
+        setTask(evt.target.value);
+    };
 
-    render() {
-        let result;
-        if (this.state.isEditing) {
-            result = (
+    return (
+        <div>
+            {isEditing ? (
+                <form onSubmit={handleUpdate}>
+                    <input
+                        type='text'
+                        value={task}
+                        name='task'
+                        onChange={handleChange}
+                    />
+                    <button>Save</button>
+                </form>
+            ) : (
                 <div>
-                    <form onSubmit={this.handleUpdate}>
-                        <input
-                            type='text'
-                            value={this.state.task}
-                            name='task'
-                            onChange={this.handleChange}
-                        />
-                        <button>Save</button>
-                    </form>
-                </div>
-            )
-        } else {
-            result = (
-                <div>
-                    <button onClick={this.toggleForm}>Edit</button>
-                    <button onClick={this.handleRemove}>Delete</button>
+                    <button onClick={toggleForm}>Edit</button>
+                    <button onClick={handleRemove}>Delete</button>
                     <input
                         type="checkbox"
-                        checked={this.props.completed}
-                        onChange={() => this.props.toggleComplete(this.props.id)}
+                        checked={props.completed}
+                        onChange={() => props.toggleComplete(props.id)}
                     />
                     <li
                         style={{
-                            textDecoration: this.props.completed ? 'line-through' : 'none',
+                            textDecoration: props.completed ? 'line-through' : 'none',
                         }}
-                    >{this.props.task}
+                    >
+                        {props.task}
                     </li>
                 </div>
-            )
-        }
-        return result;
-    }
-}
+            )}
+        </div>
+    );
+};
 
 export default UpdateTodo;

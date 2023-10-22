@@ -1,39 +1,33 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react';
 import uuid from 'react-uuid';
 
-class AddTodo extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { task: "" };
-        this.handleSubmit = this.handleSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+const AddTodo = ({ createTodo }) => {
+    const [task, setTask] = useState('');
+
+    const handleChange = (evt) => {
+        setTask(evt.target.value);
     }
-    handleChange(evt) {
-        this.setState({
-            [evt.target.name]: evt.target.value
-        });
-    }
-    handleSubmit(evt) {
+
+    const handleSubmit = (evt) => {
         evt.preventDefault();
-        this.props.createTodo({ ...this.state, id: uuid(), completed: false });
-        this.setState({ task: "" });
+        createTodo({ task, id: uuid(), completed: false });
+        setTask('');
     }
-    render() {
-        return (
-            <form onSubmit={this.handleSubmit}>
-                <label htmlFor='task'>New Todo</label>
-                <input
-                    type='text'
-                    placeholder='New Todo'
-                    id='task'
-                    name='task'
-                    value={this.state.task}
-                    onChange={this.handleChange}
-                />
-                <button>Add Todo</button>
-            </form>
-        );
-    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            <label htmlFor='task'>New Todo</label>
+            <input
+                type='text'
+                placeholder='New Todo'
+                id='task'
+                name='task'
+                value={task}
+                onChange={handleChange}
+            />
+            <button>Add Todo</button>
+        </form>
+    );
 }
 
 export default AddTodo;

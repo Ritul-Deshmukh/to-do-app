@@ -1,113 +1,94 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react';
 import AddTodo from './AddTodo';
 import UpdateTodo from './UpdateTodo';
 
-class TodoList extends Component {
+const TodoList = () => {
+    const [todos, setTodos] = useState([]);
+    const [search, setSearch] = useState('');
+    const [filterStatus, setFilterStatus] = useState('all');
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            todos: [],
-            search: '',
-            filterStatus: 'all'
-        };
-        this.create = this.create.bind(this);
-        this.remove = this.remove.bind(this);
-        this.update = this.update.bind(this);
-        this.search = this.search.bind(this);
-        this.toggleComplete = this.toggleComplete.bind(this);
-        this.changeFilter = this.changeFilter.bind(this);
-    }
+    const create = (newTodo) => {
+        setTodos([...todos, newTodo]);
+    };
 
-    create(newTodo) {
-        this.setState({
-            todos: [...this.state.todos, newTodo]
-        });
-    }
+    const remove = (id) => {
+        setTodos(todos.filter((t) => t.id !== id));
+    };
 
-    remove(id) {
-        this.setState({
-            todos: this.state.todos.filter(t => t.id !== id)
-        })
-    }
-
-    update(id, updatedTask) {
-        const updatedTodos = this.state.todos.map(todo => {
+    const update = (id, updatedTask) => {
+        const updatedTodos = todos.map((todo) => {
             if (todo.id === id) {
                 return { ...todo, task: updatedTask };
             }
             return todo;
         });
-        this.setState({ todos: updatedTodos });
-    }
+        setTodos(updatedTodos);
+    };
 
-    search(event) {
-        this.setState({ search: event.target.value });
-    }
+    const handleSearch = (event) => {
+        setSearch(event.target.value);
+    };
 
-    toggleComplete(id) {
-        const updatedTodos = this.state.todos.map((todo) => {
+    const toggleComplete = (id) => {
+        const updatedTodos = todos.map((todo) => {
             if (todo.id === id) {
                 return { ...todo, completed: !todo.completed };
             }
             return todo;
         });
-        this.setState({ todos: updatedTodos });
-    }
+        setTodos(updatedTodos);
+    };
 
-    changeFilter(filter) {
-        this.setState({ filterStatus: filter });
-    }
+    const changeFilter = (filter) => {
+        setFilterStatus(filter);
+    };
 
-    render() {
-        const filteredTodos = this.state.todos.filter((todo) =>
-            todo.task.toLowerCase().includes(this.state.search.toLowerCase())
-        );
+    const filteredTodos = todos.filter((todo) =>
+        todo.task.toLowerCase().includes(search.toLowerCase())
+    );
 
-        const filteredAndSortedTodos = filteredTodos.filter((todo) => {
-            if (this.state.filterStatus === 'active') {
-                return !todo.completed;
-            } else if (this.state.filterStatus === 'completed') {
-                return todo.completed;
-            }
-            return true;
-        });
+    const filteredAndSortedTodos = filteredTodos.filter((todo) => {
+        if (filterStatus === 'active') {
+            return !todo.completed;
+        } else if (filterStatus === 'completed') {
+            return todo.completed;
+        }
+        return true;
+    });
 
-        const todos = filteredAndSortedTodos.map(todo => {
-            return <UpdateTodo
-                key={todo.id}
-                id={todo.id}
-                task={todo.task}
-                completed={todo.completed}
-                removeTodo={this.remove}
-                updateTodo={this.update}
-                toggleComplete={this.toggleComplete}
+    const todosToRender = filteredAndSortedTodos.map((todo) => (
+        <UpdateTodo
+            key={todo.id}
+            id={todo.id}
+            task={todo.task}
+            completed={todo.completed}
+            removeTodo={remove}
+            updateTodo={update}
+            toggleComplete={toggleComplete}
+        />
+    ));
+
+    return (
+        <div>
+            <h1>Todo List</h1>
+            <AddTodo createTodo={create} />
+            <input
+                type="text"
+                placeholder="Search..."
+                value={search}
+                onChange={handleSearch}
             />
-        })
-        return (
             <div>
-                <h1>Todo List</h1>
-                <AddTodo createTodo={this.create} />
-                <input
-                    type="text"
-                    placeholder="Search..."
-                    value={this.state.search}
-                    onChange={this.search}
-                />
-                <div>
-                    <label>Filter by: </label>
-                    <select value={this.state.filterStatus} onChange={(e) => this.changeFilter(e.target.value)}>
-                        <option value="all">All</option>
-                        <option value="active">Active</option>
-                        <option value="completed">Completed</option>
-                    </select>
-                </div>
-                <ul>
-                    {todos}
-                </ul>
+                <label>Filter by: </label>
+                <select value={filterStatus} onChange={(e) => changeFilter(e.target.value)}>
+                    <option value="all">All</option>
+                    <option value="active">Active</option>
+                    <option value="completed">Completed</option>
+                </select>
             </div>
-        )
-    }
-}
+            <ul>{todosToRender}</ul>
+        </div>
+    );
+};
 
 export default TodoList;
