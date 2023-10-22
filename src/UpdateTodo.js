@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 
-class Todo extends Component {
+class UpdateTodo extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +23,6 @@ class Todo extends Component {
 
     handleUpdate(evt) {
         evt.preventDefault();
-        //take new task data and pass up to parent
         this.props.updateTodo(this.props.id, this.state.task);
         this.setState({ isEditing: false });
     }
@@ -73,4 +72,4 @@ class Todo extends Component {
     }
 }
 
-export default Todo;
+export default UpdateTodo;

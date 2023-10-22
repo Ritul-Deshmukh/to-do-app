@@ -1,8 +1,7 @@
 import React, { Component } from 'react'
 import uuid from 'react-uuid';
 
-class TodoListform extends Component {
-    //AddTodoComponent
+class AddTodo extends Component {
     constructor(props) {
         super(props);
         this.state = { task: "" };
@@ -37,8 +36,4 @@ class TodoListform extends Component {
     }
 }
 
-export default TodoListform;
-
-//Add everything in components folder
-//Add useState
-//Use function instead of class
+export default AddTodo;

@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import TodoListform from './TodoListForm';
-import Todo from './Todo';
+import AddTodo from './AddTodo';
+import UpdateTodo from './UpdateTodo';
 
-class TodoListOperartions extends Component {
-    //TodoList
+class TodoList extends Component {
 
     constructor(props) {
         super(props);
@@ -19,7 +18,7 @@ class TodoListOperartions extends Component {
         this.toggleComplete = this.toggleComplete.bind(this);
         this.changeFilter = this.changeFilter.bind(this);
     }
-    //add
+
     create(newTodo) {
         this.setState({
             todos: [...this.state.todos, newTodo]
@@ -75,7 +74,7 @@ class TodoListOperartions extends Component {
         });
 
         const todos = filteredAndSortedTodos.map(todo => {
-            return <Todo
+            return <UpdateTodo
                 key={todo.id}
                 id={todo.id}
                 task={todo.task}
@@ -88,7 +87,7 @@ class TodoListOperartions extends Component {
         return (
             <div>
                 <h1>Todo List</h1>
-                <TodoListform createTodo={this.create} />
+                <AddTodo createTodo={this.create} />
                 <input
                     type="text"
                     placeholder="Search..."
@@ -111,4 +110,4 @@ class TodoListOperartions extends Component {
     }
 }
 
-export default TodoListOperartions;
+export default TodoList;
