@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './styles.css';
 
 const UpdateTodo = (props) => {
     const [isEditing, setIsEditing] = useState(false);
@@ -23,9 +24,9 @@ const UpdateTodo = (props) => {
     };
 
     return (
-        <div>
+        <div className='Todo'>
             {isEditing ? (
-                <form onSubmit={handleUpdate}>
+                <form className='Todo-edit-form' onSubmit={handleUpdate}>
                     <input
                         type='text'
                         value={task}
@@ -35,21 +36,25 @@ const UpdateTodo = (props) => {
                     <button>Save</button>
                 </form>
             ) : (
-                <div>
-                    <button onClick={toggleForm}>Edit</button>
-                    <button onClick={handleRemove}>Delete</button>
-                    <input
-                        type="checkbox"
-                        checked={props.completed}
-                        onChange={() => props.toggleComplete(props.id)}
-                    />
-                    <li
-                        style={{
-                            textDecoration: props.completed ? 'line-through' : 'none',
-                        }}
-                    >
-                        {props.task}
-                    </li>
+                <div className='todo-container'>
+                    <div>
+                        <li
+                            style={{
+                                textDecoration: props.completed ? 'line-through' : 'none',
+                            }}
+                        >
+                            {props.task}
+                        </li>
+                    </div>
+                    <div className='todo-buttons'>
+                        <button onClick={toggleForm}>Edit</button>
+                        <button onClick={handleRemove}>Delete</button>
+                        <input
+                            type="checkbox"
+                            checked={props.completed}
+                            onChange={() => props.toggleComplete(props.id)}
+                        />
+                    </div>
                 </div>
             )}
         </div>

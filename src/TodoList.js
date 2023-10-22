@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import AddTodo from './AddTodo';
 import UpdateTodo from './UpdateTodo';
+import './styles.css';
 
 const TodoList = () => {
     const [todos, setTodos] = useState([]);
@@ -69,10 +70,11 @@ const TodoList = () => {
     ));
 
     return (
-        <div>
+        <div className='TodoList'>
             <h1>Todo List</h1>
             <AddTodo createTodo={create} />
             <input
+                className='search'
                 type="text"
                 placeholder="Search..."
                 value={search}
